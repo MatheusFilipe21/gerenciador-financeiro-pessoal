@@ -2,6 +2,9 @@
 __pycache__/
 *.py[cod]
 
+# Ambiente
+.env
+
 # Ambiente virtual
 venv/
 ENV/
