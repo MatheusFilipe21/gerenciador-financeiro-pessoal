@@ -80,3 +80,15 @@ def atualizar(id):
         pessoa.nome = pessoaNovosDados.nome
 
         return jsonify(pessoa.to_dict()), 200
+
+@pessoa_bp.route('/pessoas/<int:id>', methods=['DELETE'])
+def deletar(id):
+    with session_scope() as session:
+        pessoa, erro, status = buscar_pessoa_por_id(session, id)
+
+        if erro:
+            return erro, status
+
+        session.delete(pessoa)
+
+        return '', 204
