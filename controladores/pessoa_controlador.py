@@ -4,6 +4,13 @@ from entidades import Pessoa
 
 pessoa_bp = Blueprint('pessoa_bp', __name__)
 
+@pessoa_bp.route('/pessoas', methods=['GET'])
+def buscar_tudo():
+    with session_scope() as session:
+        pessoas = session.query(Pessoa).all()
+
+        return jsonify([pessoa.to_dict() for pessoa in pessoas]), 200
+
 @pessoa_bp.route('/pessoas/<int:id>', methods=['GET'])
 def buscar_por_id(id):
     with session_scope() as session:
