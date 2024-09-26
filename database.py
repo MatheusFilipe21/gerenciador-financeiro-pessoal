@@ -5,4 +5,4 @@ from config import Config
 
 engine = create_engine(Config.SQLALCHEMY_DATABASE_URI)
 Base = declarative_base()
-db_session = sessionmaker(bind=engine)()
+SessionFactory = sessionmaker(bind=engine)

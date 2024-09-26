@@ -1,5 +1,5 @@
 from flask import Flask
-from database import Base, db_session, engine
+from database import Base, engine
 from entidades.pessoa import Pessoa
 from config import Config
 
@@ -8,7 +8,6 @@ app.config.from_object(Config)
 
 def iniciar_banco_de_dados():
     Base.metadata.create_all(bind=engine)
-    db_session.commit()
 
 def registrar_blueprints():
     from controladores import pessoa_bp
