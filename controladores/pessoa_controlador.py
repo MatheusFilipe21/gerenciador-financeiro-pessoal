@@ -5,7 +5,7 @@ from entidades import Pessoa
 pessoa_bp = Blueprint('pessoa_bp', __name__)
 
 def buscar_pessoa_por_id(session, id):
-    pessoa = session.query(Pessoa).get(id)
+    pessoa = session.get(Pessoa, id)
 
     if pessoa is None:
         return None, jsonify({'erros': ['Pessoa não encontrada!']}), 404
