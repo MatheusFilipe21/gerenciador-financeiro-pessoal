@@ -28,12 +28,26 @@
     <thead>
       <tr>
         <th scope="col">Nome</th>
+        <th scope="col" class="text-center">Ações</th>
       </tr>
     </thead>
     <tbody class="table-group-divider">
       {% for pessoa in pessoas %}
       <tr id="pessoa_{{ pessoa.id }}">
         <td class="align-middle">{{ pessoa.nome }}</td>
+
+        <td class="text-center">
+          <button
+            class="btn btn-sm mb-1 btn-warning"
+            data-bs-toggle="modal"
+            data-bs-target="#pessoaModal"
+            data-id="{{ pessoa.id }}"
+            data-nome="{{ pessoa.nome }}"
+            data-acao="editar"
+          >
+            <i class="fa-solid fa-pen text-light"></i>
+          </button>
+        </td>
       </tr>
       {% endfor %}
     </tbody>
