@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Pessoas{% endblock %}
+
+{% block css %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/pessoas.css') }}"
+/>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1 class="text-center">Pessoas</h1>
+  
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">Nome</th>
+      </tr>
+    </thead>
+    <tbody class="table-group-divider">
+      {% for pessoa in pessoas %}
+      <tr id="pessoa_{{ pessoa.id }}">
+        <td class="align-middle">{{ pessoa.nome }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% block script %}
+<script src="{{ url_for('static', filename='js/pessoas.js') }}"></script>
+{% endblock %}
+
+{% endblock %}
