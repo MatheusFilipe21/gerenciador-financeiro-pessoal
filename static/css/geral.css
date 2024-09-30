@@ -10,3 +10,16 @@ body {
 .container {
   flex: 1;
 }
+
+.toast {
+  transition: all 0.5s ease;
+}
+
+.toast-header {
+  background-color: #007bff;
+  color: white;
+}
+
+.toast-body {
+  font-size: 1rem;
+}
