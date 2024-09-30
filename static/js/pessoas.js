@@ -37,6 +37,9 @@ $("#pessoaModal").on("show.bs.modal", async function (event) {
     case "editar":
       prepararModalParaEdicao(modal, inputNome, salvarBtn,nomePessoaErro, id, nome);
       break;
+    case "excluir":
+      prepararModalParaExclusao(modal, inputNome, salvarBtn, id, nome);
+      break;
   }
 });
 
@@ -92,6 +95,23 @@ function prepararModalParaEdicao(modal, inputNome, salvarBtn, nomePessoaErro, id
     $(`#pessoa_${id} td:first`).text(novoNome);
 
     $(`#pessoa_${id} [data-acao="editar"]`).data("nome", novoNome);
+    $(`#pessoa_${id} [data-acao="excluir"]`).data("nome", novoNome);
+
+    modal.modal("hide");
+  });
+}
+
+function prepararModalParaExclusao(modal, inputNome, salvarBtn, id, nome) {
+  modal.find(".modal-title").text("Excluir Pessoa");
+  inputNome.val(nome).prop("disabled", true);
+  salvarBtn.text("Excluir").removeClass("btn-primary").addClass("btn-danger");
+
+  salvarBtn.off("click").on("click", async function () {
+    await excluirPessoa(id);
+
+    $(`#pessoa_${id}`).remove();
+
+    verificarListaDePessoas();
 
     modal.modal("hide");
   });
@@ -117,6 +137,10 @@ function novaPessoaHtml(novaPessoa) {
   <td class="text-center">
     <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#pessoaModal" data-id="${novaPessoa.id}" data-nome="${novaPessoa.nome}" data-acao="editar">
       <i class="fa-solid fa-pen text-light"></i>
+    </button>
+    
+    <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#pessoaModal" data-id="${novaPessoa.id}" data-nome="${novaPessoa.nome}" data-acao="excluir">
+      <i class="fa-solid fa-trash"></i>
     </button>
   </td>
 </tr>
@@ -184,5 +208,21 @@ async function atualizarPessoa(id, nome) {
     exibirNotificacao("Pessoa atualizada com sucesso!", false);
   } catch (error) {
     exibirNotificacao("Erro ao atualizar a pessoa.", true);
+  }
+}
+
+async function excluirPessoa(id) {
+  try {
+    const response = await fetch(`${urlApiPessoas}/${id}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      throw new Error();
+    }
+
+    exibirNotificacao("Pessoa excluída com sucesso!", false);
+  } catch (error) {
+    exibirNotificacao("Erro ao excluir a pessoa.", true);
   }
 }

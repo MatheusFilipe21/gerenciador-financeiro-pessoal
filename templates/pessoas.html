@@ -47,6 +47,17 @@
           >
             <i class="fa-solid fa-pen text-light"></i>
           </button>
+          
+          <button
+            class="btn btn-sm mb-1 btn-danger"
+            data-bs-toggle="modal"
+            data-bs-target="#pessoaModal"
+            data-id="{{ pessoa.id }}"
+            data-nome="{{ pessoa.nome }}"
+            data-acao="excluir"
+          >
+            <i class="fa-solid fa-trash"></i>
+          </button>
         </td>
       </tr>
       {% endfor %}
