@@ -13,3 +13,11 @@ def pessoas():
     pessoas = buscar_todas_pessoas()
 
     return render_template('pessoas.html', pessoas=pessoas)
+
+@app_bp.route('/contas')
+def contas():
+    from controladores.conta_controlador import buscar_todas_contas
+
+    contas = buscar_todas_contas()
+
+    return render_template('contas.html', contas=contas)

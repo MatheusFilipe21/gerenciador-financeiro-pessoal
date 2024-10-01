@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Contas{% endblock %}
+
+{% block css %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/contas.css') }}"
+/>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1 class="text-center">Contas</h1>
+  
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">Nome</th>
+        <th scope="col">Pessoa</th>
+      </tr>
+    </thead>
+    <tbody class="table-group-divider">
+      {% for conta in contas %}
+      <tr id="conta_{{ conta.id }}">
+        <td class="align-middle">{{ conta.nome }}</td>
+
+        <td class="align-middle">{{ conta.pessoa.nome }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% block script %}
+<script src="{{ url_for('static', filename='js/contas.js') }}"></script>
+{% endblock %}
+
+{% endblock %}
