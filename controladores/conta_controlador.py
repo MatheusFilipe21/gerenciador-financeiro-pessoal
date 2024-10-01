@@ -1,13 +1,13 @@
 from flask import Blueprint, jsonify, request, url_for
 from session_manager import session_scope
-from entidades import Conta
+from entidades import Conta, Pessoa
 from controladores.pessoa_controlador import buscar_pessoa_por_id
 
 conta_bp = Blueprint('conta_bp', __name__)
 
 def buscar_todas_contas():
     with session_scope() as session:
-        contas = session.query(Conta).all()
+        contas = session.query(Conta).join(Pessoa).order_by(Pessoa.nome, Conta.nome).all()
         return [conta.to_dict() for conta in contas]
 
 def buscar_conta_por_id(session, id):

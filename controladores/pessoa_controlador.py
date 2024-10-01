@@ -6,7 +6,7 @@ pessoa_bp = Blueprint('pessoa_bp', __name__)
 
 def buscar_todas_pessoas():
     with session_scope() as session:
-        pessoas = session.query(Pessoa).all()
+        pessoas = session.query(Pessoa).order_by(Pessoa.nome).all()
         return [pessoa.to_dict() for pessoa in pessoas]
 
 def buscar_pessoa_por_id(session, id):
