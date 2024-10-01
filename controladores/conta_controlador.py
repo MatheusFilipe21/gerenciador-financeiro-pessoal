@@ -98,3 +98,15 @@ def atualizar(id):
         conta.pessoa_id = contaNovosDados.pessoa_id
 
         return jsonify(conta.to_dict()), 200
+
+@conta_bp.route('/contas/<int:id>', methods=['DELETE'])
+def deletar(id):
+    with session_scope() as session:
+        conta, erro, status = buscar_conta_por_id(session, id)
+
+        if erro:
+            return erro, status
+
+        session.delete(conta)
+
+        return '', 204
