@@ -37,6 +37,9 @@ $("#contaModal").on("show.bs.modal", async function (event) {
     case "editar":
       prepararModalParaEdicao(modal, salvarBtn, id, nome, pessoaSelect);
       break;
+    case "excluir":
+      prepararModalParaExclusao(modal, salvarBtn, id, nome, pessoaSelect);
+      break;
   }
 });
 
@@ -134,6 +137,27 @@ function prepararModalParaEdicao(modal, salvarBtn, id, nome, pessoaSelect) {
 
     $(`#conta_${id} [data-acao="editar"]`).data("nome", novoNome);
     $(`#conta_${id} [data-acao="editar"]`).data("pessoa-id", pessoaId);
+    $(`#conta_${id} [data-acao="excluir"]`).data("nome", novoNome);
+    $(`#conta_${id} [data-acao="excluir"]`).data("pessoa-id", pessoaId);
+
+    modal.modal("hide");
+  });
+}
+
+function prepararModalParaExclusao(modal, salvarBtn, id, nome, pessoaSelect) {
+  var inputNome = modal.find("#nomeConta");
+  
+  modal.find(".modal-title").text("Excluir Conta");
+  inputNome.val(nome).prop("disabled", true);
+  pessoaSelect.prop("disabled", true);
+  salvarBtn.text("Excluir").removeClass("btn-primary").addClass("btn-danger");
+
+  salvarBtn.off("click").on("click", async function () {
+    await excluirConta(id);
+
+    $(`#conta_${id}`).remove();
+
+    verificarListaDeContas();
 
     modal.modal("hide");
   });
@@ -177,6 +201,18 @@ function novaContaHtml(novaConta) {
       data-acao="editar"
     >
       <i class="fa-solid fa-pen text-light"></i>
+    </button>
+
+    <button
+      class="btn btn-sm mb-1 btn-danger"
+      data-bs-toggle="modal"
+      data-bs-target="#contaModal"
+      data-id="${novaConta.id}"
+      data-nome="${novaConta.nome}"
+      data-pessoa-id="${novaConta.pessoa.id}"
+      data-acao="excluir"
+    >
+      <i class="fa-solid fa-trash"></i>
     </button>
   </td>
 </tr>

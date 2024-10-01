@@ -185,3 +185,19 @@ async function atualizarConta(id, nome, pessoaId) {
     exibirNotificacao("Erro ao atualizar a conta.", true);
   }
 }
+
+async function excluirConta(id) {
+  try {
+    const response = await fetch(`${urlApiContas}/${id}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      throw new Error();
+    }
+
+    exibirNotificacao("Conta excluída com sucesso!", false);
+  } catch (error) {
+    exibirNotificacao("Erro ao excluir a conta.", true);
+  }
+}
