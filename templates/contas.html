@@ -29,6 +29,7 @@
       <tr>
         <th scope="col">Nome</th>
         <th scope="col">Pessoa</th>
+        <th scope="col" class="text-center">Ações</th>
       </tr>
     </thead>
     <tbody class="table-group-divider">
@@ -37,6 +38,20 @@
         <td class="align-middle">{{ conta.nome }}</td>
 
         <td class="align-middle">{{ conta.pessoa.nome }}</td>
+
+        <td class="text-center">
+          <button
+            class="btn btn-sm mb-1 btn-warning"
+            data-bs-toggle="modal"
+            data-bs-target="#contaModal"
+            data-id="{{ conta.id }}"
+            data-nome="{{ conta.nome }}"
+            data-pessoa-id="{{ conta.pessoa.id }}"
+            data-acao="editar"
+          >
+            <i class="fa-solid fa-pen text-light"></i>
+          </button>
+        </td>
       </tr>
       {% endfor %}
     </tbody>

@@ -165,3 +165,23 @@ async function criarConta(nome, pessoaId) {
     exibirNotificacao("Erro ao criar a conta.", true);
   }
 }
+
+async function atualizarConta(id, nome, pessoaId) {
+  try {
+    const response = await fetch(`${urlApiContas}/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ nome: nome, pessoa: { id: pessoaId } }),
+    });
+
+    if (!response.ok) {
+      throw new Error();
+    }
+
+    exibirNotificacao("Conta atualizada com sucesso!", false);
+  } catch (error) {
+    exibirNotificacao("Erro ao atualizar a conta.", true);
+  }
+}

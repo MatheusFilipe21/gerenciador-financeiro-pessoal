@@ -20,16 +20,22 @@ function verificarListaDeContas() {
 $("#contaModal").on("show.bs.modal", async function (event) {
   var button = $(event.relatedTarget);
   var acao = button.data("acao");
+  var id = button.data("id");
+  var nome = button.data("nome");
+  var pessoaId = button.data("pessoa-id");
 
   var modal = $(this);
   var salvarBtn = modal.find("#modalSalvarAlteracoes");
   var pessoaSelect = modal.find("#pessoaSelect");
 
-  await carregarPessoas(pessoaSelect);
+  await carregarPessoas(pessoaSelect, pessoaId);
 
   switch (acao) {
     case "criar":
       prepararModalParaCriacao(modal, salvarBtn, pessoaSelect);
+      break;
+    case "editar":
+      prepararModalParaEdicao(modal, salvarBtn, id, nome, pessoaSelect);
       break;
   }
 });
@@ -92,6 +98,47 @@ function prepararModalParaCriacao(modal, salvarBtn, pessoaSelect) {
   });
 }
 
+function prepararModalParaEdicao(modal, salvarBtn, id, nome, pessoaSelect) {
+  var inputNome = modal.find("#nomeConta");
+  var nomeContaErro = modal.find("#nomeContaErro");
+  var pessoaSelectErro = modal.find("#pessoaSelectErro");
+  
+  modal.find(".modal-title").text("Editar Conta");
+  inputNome.val(nome).prop("disabled", false);
+  pessoaSelect.prop("disabled", false);
+  salvarBtn
+    .text("Salvar alterações")
+    .removeClass("btn-danger")
+    .addClass("btn-primary");
+
+  inputNome.off("input").on("input", function() {
+    nomeContaErro.hide();
+  });
+
+  pessoaSelect.off("change").on("change", function() {
+    pessoaSelectErro.hide();
+  });
+
+  salvarBtn.off("click").on("click", async function () {
+    if (!validar(inputNome, nomeContaErro, pessoaSelect, pessoaSelectErro)) {
+      return;
+    }
+
+    const novoNome = inputNome.val();
+    const pessoaId = pessoaSelect.val();
+
+    await atualizarConta(id, novoNome, pessoaId);
+
+    $(`#conta_${id} td:first`).text(novoNome);
+    $(`#conta_${id} td:nth-child(2)`).text(pessoaSelect.find("option:selected").text());
+
+    $(`#conta_${id} [data-acao="editar"]`).data("nome", novoNome);
+    $(`#conta_${id} [data-acao="editar"]`).data("pessoa-id", pessoaId);
+
+    modal.modal("hide");
+  });
+}
+
 function validar(inputNome, nomeContaErro, pessoaSelect, pessoaSelectErro) {
   let isValido = true;
 
@@ -118,6 +165,20 @@ function novaContaHtml(novaConta) {
   <td class="align-middle">${novaConta.nome}</td>
 
   <td class="align-middle">${novaConta.pessoa.nome}</td>
+
+  <td class="text-center">
+    <button
+      class="btn btn-sm mb-1 btn-warning"
+      data-bs-toggle="modal"
+      data-bs-target="#contaModal"
+      data-id="${novaConta.id}"
+      data-nome="${novaConta.nome}"
+      data-pessoa-id="${novaConta.pessoa.id}"
+      data-acao="editar"
+    >
+      <i class="fa-solid fa-pen text-light"></i>
+    </button>
+  </td>
 </tr>
 `;
 }
