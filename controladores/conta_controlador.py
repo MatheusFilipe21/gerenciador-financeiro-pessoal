@@ -78,3 +78,23 @@ def criar():
         location_url = f"{request.host_url.rstrip('/')}{url_for('conta_bp.buscar_por_id', id=conta.id)}"
     
         return '', 201, {'Location': location_url}
+
+@conta_bp.route('/contas/<int:id>', methods=['PUT'])
+def atualizar(id):
+    dados = request.get_json()
+
+    contaNovosDados, erro, status = validar(dados)
+
+    if erro:
+        return erro, status
+
+    with session_scope() as session:
+        conta, erro, status = buscar_conta_por_id(session, id)
+        
+        if erro:
+            return erro, status
+
+        conta.nome = contaNovosDados.nome
+        conta.pessoa_id = contaNovosDados.pessoa_id
+
+        return jsonify(conta.to_dict()), 200
