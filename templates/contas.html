@@ -12,6 +12,17 @@
 {% block content %}
 <div class="container mt-4">
   <h1 class="text-center">Contas</h1>
+
+  <div class="d-flex justify-content-end mb-3">
+    <button
+      class="btn btn-success"
+      data-bs-toggle="modal"
+      data-bs-target="#contaModal"
+      data-acao="criar"
+    >
+      <i class="fa-solid fa-plus"></i>
+    </button>
+  </div>
   
   <table class="table table-hover">
     <thead>
@@ -32,7 +43,61 @@
   </table>
 </div>
 
+<div
+  class="modal fade"
+  id="contaModal"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="contaModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="contaModalLabel"></h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="modal-body">
+        <label for="nomeConta" class="form-label">Nome</label>
+        <input
+          type="text"
+          id="nomeConta"
+          class="form-control"
+          placeholder="Nome"
+          required
+        />
+
+        <div id="nomeContaErro" class="text-danger" style="display: none;"></div>
+
+        <label for="pessoaSelect" class="form-label mt-3">Pessoa</label>
+        <select id="pessoaSelect" class="form-select">
+          <option selected disabled>Selecione uma pessoa</option>
+        </select>
+
+        <div id="pessoaSelectErro" class="text-danger" style="display: none;"></div>
+      </div>
+
+      <div class="modal-footer justify-content-center">
+        <button
+          type="button"
+          class="btn btn-primary"
+          id="modalSalvarAlteracoes"
+        >
+          Confirmar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 {% block script %}
+<script src="{{ url_for('static', filename='js/api.js') }}"></script>
 <script src="{{ url_for('static', filename='js/contas.js') }}"></script>
 {% endblock %}
 
