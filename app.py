@@ -9,14 +9,14 @@ def iniciar_banco_de_dados():
     Base.metadata.create_all(bind=engine)
 
 def registrar_blueprints():
-    from controladores import app_bp
-    from controladores import pessoa_bp
+    from controladores import app_bp, pessoa_bp, conta_bp
 
     app.register_blueprint(app_bp)
 
     prefixo_api = '/api'
     
     app.register_blueprint(pessoa_bp, url_prefix=prefixo_api)
+    app.register_blueprint(conta_bp, url_prefix=prefixo_api)
 
 if __name__ == '__main__':
     registrar_blueprints()
