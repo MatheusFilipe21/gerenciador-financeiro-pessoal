@@ -92,3 +92,15 @@ def atualizar(id):
         categoria.nome = categoriaNovosDados.nome
 
         return jsonify(categoria.to_dict()), 200
+
+@categoria_bp.route('/categorias/<int:id>', methods=['DELETE'])
+def deletar(id):
+    with session_scope() as session:
+        categoria, erro, status = buscar_categoria_por_id(session, id)
+
+        if erro:
+            return erro, status
+
+        session.delete(categoria)
+
+        return '', 204
