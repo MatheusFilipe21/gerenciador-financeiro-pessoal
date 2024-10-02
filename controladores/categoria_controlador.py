@@ -73,3 +73,22 @@ def criar():
         location_url = f"{request.host_url.rstrip('/')}{url_for('categoria_bp.buscar_por_id', id=categoria.id)}"
     
         return '', 201, {'Location': location_url}
+
+@categoria_bp.route('/categorias/<int:id>', methods=['PUT'])
+def atualizar(id):
+    dados = request.get_json()
+
+    categoriaNovosDados, erro, status = validar(dados)
+
+    if erro:
+        return erro, status
+
+    with session_scope() as session:
+        categoria, erro, status = buscar_categoria_por_id(session, id)
+        
+        if erro:
+            return erro, status
+
+        categoria.nome = categoriaNovosDados.nome
+
+        return jsonify(categoria.to_dict()), 200
