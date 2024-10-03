@@ -267,3 +267,23 @@ async function criarCategoria(nome, tipo) {
     exibirNotificacao("Erro ao criar a categoria.", true);
   }
 }
+
+async function atualizarCategoria(id, nome, tipo) {
+  try {
+    const response = await fetch(`${urlApiCategorias}/${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ nome: nome, tipo: tipo }),
+    });
+
+    if (!response.ok) {
+      throw new Error();
+    }
+
+    exibirNotificacao("Categoria atualizada com sucesso!", false);
+  } catch (error) {
+    exibirNotificacao("Erro ao atualizar a categoria.", true);
+  }
+}

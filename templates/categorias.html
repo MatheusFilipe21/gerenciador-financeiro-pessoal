@@ -29,13 +29,29 @@
       <tr>
         <th scope="col">Nome</th>
         <th scope="col">Tipo</th>
+        <th scope="col" class="text-center">Ações</th>
       </tr>
     </thead>
     <tbody class="table-group-divider">
       {% for categoria in categorias %}
       <tr id="categoria_{{ categoria.id }}">
         <td class="align-middle">{{ categoria.nome }}</td>
+        
         <td class="align-middle">{{ categoria.tipo }}</td>
+
+        <td class="text-center">
+          <button
+            class="btn btn-sm mb-1 btn-warning"
+            data-bs-toggle="modal"
+            data-bs-target="#categoriaModal"
+            data-id="{{categoria.id}}"
+            data-nome="{{categoria.nome}}"
+            data-tipo="{{categoria.tipo}}"
+            data-acao="editar"
+          >
+            <i class="fa-solid fa-pen text-light"></i>
+          </button>
+        </td>
       </tr>
       {% endfor %}
     </tbody>
@@ -78,7 +94,7 @@
           style="display: none"
         ></div>
 
-        <label class="form-label mt-3" for="tipoCategoria">Tipo</label>
+        <p class="form-label mt-3">Tipo</p>
         <div class="d-flex">
           {% for tipoCategoria in tiposCategoria %}
         <div class="form-check ms-3">
@@ -88,7 +104,6 @@
             name="tipo"
             id="{{ tipoCategoria.name }}"
             value="{{ tipoCategoria.value }}"
-            {% if loop.first %}checked{% endif %}
           />
           
           <label class="form-check-label" for="{{ tipoCategoria.name }}">

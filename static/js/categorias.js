@@ -19,6 +19,9 @@ function verificarListaDeCategorias() {
 $("#categoriaModal").on("show.bs.modal", async function (event) {
   var button = $(event.relatedTarget);
   var acao = button.data("acao");
+  var id = button.data("id");
+  var nome = button.data("nome");
+  var tipo = button.data("tipo");
 
   var modal = $(this);
   var salvarBtn = modal.find("#modalSalvarAlteracoes");
@@ -26,6 +29,9 @@ $("#categoriaModal").on("show.bs.modal", async function (event) {
   switch (acao) {
     case "criar":
       prepararModalParaCriacao(modal, salvarBtn);
+      break;
+    case "editar":
+      prepararModalParaEdicao(modal, salvarBtn, id, nome, tipo);
       break;
   }
 });
@@ -37,8 +43,14 @@ function prepararModalParaCriacao(modal, salvarBtn) {
   
   modal.find(".modal-title").text("Criar Nova Categoria");
   inputNome.val("").prop("disabled", false);
-  inputsTipo.each(function() {
+  inputsTipo.each(function(index) {
     $(this).prop("disabled", false);
+
+    if (index === 0) {
+      $(this).prop("checked", true);
+    } else {
+      $(this).prop("checked", false);
+    }
   });
   salvarBtn.text("Criar").removeClass("btn-danger").addClass("btn-primary");
 
@@ -67,13 +79,53 @@ function prepararModalParaCriacao(modal, salvarBtn) {
   });
 }
 
-function validarNome(inputNome, nomePessoaErro) {
+function prepararModalParaEdicao(modal, salvarBtn, id, nome, tipo) {
+  var inputNome = modal.find("#nomeCategoria");
+  var nomeCategoriaErro = modal.find("#nomeCategoriaErro");
+  var inputsTipo = modal.find('input[name="tipo"]');
+  
+  modal.find(".modal-title").text("Editar Categoria");
+  inputNome.val(nome).prop("disabled", false);
+  inputsTipo.each(function() {
+    $(this).prop("checked", $(this).val() === tipo);
+    $(this).prop("disabled", false);
+  });
+  salvarBtn
+    .text("Salvar alterações")
+    .removeClass("btn-danger")
+    .addClass("btn-primary");
+
+  inputNome.off("input").on("input", function() {
+    nomeCategoriaErro.hide();
+  });
+
+  salvarBtn.off("click").on("click", async function () {
+    if (!validarNome(inputNome, nomeCategoriaErro)) {
+      return;
+    }
+
+    const novoNome = inputNome.val();
+    const novoTipo = modal.find('input[name="tipo"]:checked').val();
+
+    await atualizarCategoria(id, novoNome, novoTipo);
+
+    $(`#categoria_${id} td:first`).text(novoNome);
+    $(`#categoria_${id} td:nth-child(2)`).text(novoTipo);
+
+    $(`#categoria_${id} [data-acao="editar"]`).data("nome", novoNome);
+    $(`#categoria_${id} [data-acao="editar"]`).data("tipo", novoTipo);
+
+    modal.modal("hide");
+  });
+}
+
+function validarNome(inputNome, nomeCategoriaErro) {
   if (!inputNome.val()) {
-    nomePessoaErro.text("O nome não pode estar vazio.").show();
+    nomeCategoriaErro.text("O nome não pode estar vazio.").show();
 
     return false;
   } else {
-    nomePessoaErro.hide();
+    nomeCategoriaErro.hide();
 
     return true;
   }
@@ -83,7 +135,22 @@ function novaCategoriaHtml(novaCategoria) {
   return `
 <tr id="categoria_${novaCategoria.id}">
   <td class="align-middle">${novaCategoria.nome}</td>
+
   <td class="align-middle">${novaCategoria.tipo}</td>
+
+  <td class="text-center">
+    <button
+      class="btn btn-sm mb-1 btn-warning"
+      data-bs-toggle="modal"
+      data-bs-target="#categoriaModal"
+      data-id="${novaCategoria.id}"
+      data-nome="${novaCategoria.nome}"
+      data-tipo="${novaCategoria.tipo}"
+      data-acao="editar"
+    >
+      <i class="fa-solid fa-pen text-light"></i>
+    </button>
+  </td>
 </tr>
 `;
 }
