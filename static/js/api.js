@@ -287,3 +287,19 @@ async function atualizarCategoria(id, nome, tipo) {
     exibirNotificacao("Erro ao atualizar a categoria.", true);
   }
 }
+
+async function excluirCategoria(id) {
+  try {
+    const response = await fetch(`${urlApiCategorias}/${id}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      throw new Error();
+    }
+
+    exibirNotificacao("Categoria excluída com sucesso!", false);
+  } catch (error) {
+    exibirNotificacao("Erro ao excluir a categoria.", true);
+  }
+}

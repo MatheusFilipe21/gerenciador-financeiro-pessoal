@@ -33,6 +33,9 @@ $("#categoriaModal").on("show.bs.modal", async function (event) {
     case "editar":
       prepararModalParaEdicao(modal, salvarBtn, id, nome, tipo);
       break;
+    case "excluir":
+      prepararModalParaExclusao(modal, salvarBtn, id, nome, tipo);
+      break;
   }
 });
 
@@ -114,6 +117,31 @@ function prepararModalParaEdicao(modal, salvarBtn, id, nome, tipo) {
 
     $(`#categoria_${id} [data-acao="editar"]`).data("nome", novoNome);
     $(`#categoria_${id} [data-acao="editar"]`).data("tipo", novoTipo);
+    $(`#categoria_${id} [data-acao="excluir"]`).data("nome", novoNome);
+    $(`#categoria_${id} [data-acao="excluir"]`).data("tipo", novoTipo);
+
+    modal.modal("hide");
+  });
+}
+
+function prepararModalParaExclusao(modal, salvarBtn, id, nome, tipo) {
+  var inputNome = modal.find("#nomeCategoria");
+  var inputsTipo = modal.find('input[name="tipo"]');
+
+  modal.find(".modal-title").text("Excluir Categoria");
+  inputNome.val(nome).prop("disabled", true);
+  inputsTipo.each(function() {
+    $(this).prop("checked", $(this).val() === tipo);
+    $(this).prop("disabled", true);
+  });
+  salvarBtn.text("Excluir").removeClass("btn-primary").addClass("btn-danger");
+
+  salvarBtn.off("click").on("click", async function () {
+    await excluirCategoria(id);
+
+    $(`#categoria_${id}`).remove();
+
+    verificarListaDeCategorias();
 
     modal.modal("hide");
   });
@@ -149,6 +177,18 @@ function novaCategoriaHtml(novaCategoria) {
       data-acao="editar"
     >
       <i class="fa-solid fa-pen text-light"></i>
+    </button>
+
+    <button
+      class="btn btn-sm mb-1 btn-danger"
+      data-bs-toggle="modal"
+      data-bs-target="#categoriaModal"
+      data-id="${novaCategoria.id}"
+      data-nome="${novaCategoria.nome}"
+      data-tipo="${novaCategoria.tipo}"
+      data-acao="excluir"
+    >
+      <i class="fa-solid fa-trash"></i>
     </button>
   </td>
 </tr>

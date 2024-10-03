@@ -90,6 +90,7 @@ def atualizar(id):
             return erro, status
 
         categoria.nome = categoriaNovosDados.nome
+        categoria.tipo = categoriaNovosDados.tipo
 
         return jsonify(categoria.to_dict()), 200
 
