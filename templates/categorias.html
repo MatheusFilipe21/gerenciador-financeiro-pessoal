@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Categorias{% endblock %}
+
+{% block css %}
+<link
+  rel="stylesheet"
+  href="{{ url_for('static', filename='css/categorias.css') }}"
+/>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+  <h1 class="text-center">Categorias</h1>
+  
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th scope="col">Nome</th>
+        <th scope="col">Tipo</th>
+      </tr>
+    </thead>
+    <tbody class="table-group-divider">
+      {% for categoria in categorias %}
+      <tr id="categoria_{{ categoria.id }}">
+        <td class="align-middle">{{ categoria.nome }}</td>
+        <td class="align-middle">{{ categoria.tipo }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+{% block script %}
+<script src="{{ url_for('static', filename='js/categorias.js') }}"></script>
+{% endblock %}
+
+{% endblock %}

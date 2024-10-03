@@ -21,3 +21,9 @@ def contas():
     contas = buscar_todas_contas()
 
     return render_template('contas.html', contas=contas)
+
+@app_bp.route('/categorias')
+def categorias():
+    from controladores.categoria_controlador import buscar_todas_categorias
+    categorias = buscar_todas_categorias()
+    return render_template('categorias.html', categorias=categorias)
