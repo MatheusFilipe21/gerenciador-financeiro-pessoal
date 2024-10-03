@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template
+from enums import TipoCategoria
 
 app_bp = Blueprint('app_bp', __name__)
 
@@ -26,4 +27,4 @@ def contas():
 def categorias():
     from controladores.categoria_controlador import buscar_todas_categorias
     categorias = buscar_todas_categorias()
-    return render_template('categorias.html', categorias=categorias)
+    return render_template('categorias.html', categorias=categorias, tiposCategoria=TipoCategoria)

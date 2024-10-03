@@ -201,3 +201,69 @@ async function excluirConta(id) {
     exibirNotificacao("Erro ao excluir a conta.", true);
   }
 }
+
+var urlApiCategorias = "/api/categorias";
+
+async function buscarTodasCategorias() {
+  try {
+    const response = await fetch(urlApiCategorias, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error();
+    }
+
+    const categorias = await response.json();
+    return categorias;
+  } catch (error) {
+    exibirNotificacao("Erro ao recuperar as categorias.", true);
+  }
+}
+
+async function buscarCategoriaPorId(id) {
+  try {
+    const response = await fetch(`${urlApiCategorias}/${id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error();
+    }
+
+    const categoria = await response.json();
+    return categoria;
+  } catch (error) {
+    exibirNotificacao("Erro ao recuperar a categoria.", true);
+  }
+}
+
+async function criarCategoria(nome, tipo) {
+  try {
+    const response = await fetch(urlApiCategorias, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ nome: nome, tipo: tipo }),
+    });
+
+    if (!response.ok) {
+      throw new Error();
+    }
+
+    const id = response.headers.get("Location").split("/").pop();
+
+    exibirNotificacao("Categoria criada com sucesso!", false);
+
+    return id;
+  } catch (error) {
+    exibirNotificacao("Erro ao criar a categoria.", true);
+  }
+}
